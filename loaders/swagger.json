@@ -1,0 +1,644 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Spotted Lanternfly API",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000"
+      }
+    ],
+    "paths": {
+      "/auth/login": {
+        "summary": "login into your user",
+        "description": "login into your user",
+        "post": {
+          "summary": "Login into your user",
+          "description": "Login into your user so you can have access to certain paths.",
+          "operationId": "auth_login",
+          "requestBody": {
+            "description": "The login object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Login"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "If login is succesful you will be redirected to the main page with a welcome message that includes your username",
+              "content": {
+                "application/json": {
+                  "examples": {
+                    "Succesful Login": {
+                      "value": "{\n \"message\": \"Welcome [user]\"\n}"
+                    }
+                  }
+                }
+              }
+            },
+            "default": {
+              "description": "Default error sample response"
+            }
+          },
+          "tags": [
+            "Auth"
+          ]
+        }
+      },
+      "/auth/register": {
+        "summary": "Create a personal user/account",
+        "description": "Create a personal user/account to have access to certain restricted paths.",
+        "post": {
+          "summary": "Register a new account/user",
+          "description": "Register a new account/user by submitting the required information.",
+          "operationId": "auth_register",
+          "requestBody": {
+            "description": "The register object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Register"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "If you register succesfully you'll get a message letting you know",
+              "content": {
+                "application/json": {
+                  "examples": {
+                    "Succesful Register": {
+                      "value": "{\n \"Message\": \"User Created!\"\n}"
+                    }
+                  }
+                }
+              }
+            },
+            "default": {
+              "description": "Default error sample response"
+            }
+          },
+          "tags": [
+            "Auth"
+          ]
+        }
+      },
+      "/auth/logout": {
+        "summary": "Logout from your account ",
+        "description": "auth_logout",
+        "get": {
+          "summary": "Logout from your account",
+          "description": "Logout from your account, by doing this you will stop having access to certain paths.",
+          "operationId": "auth_logout",
+          "responses": {
+            "200": {
+              "description": "When you logout successfully you'll be redirected to the homepage",
+              "content": {
+                "application/json": {
+                  "examples": {
+                    "Logout will redirect you to the homepage": {
+                      "value": "{\n \"Message\": \"Welcome Guest\"\n}"
+                    }
+                  }
+                }
+              }
+            },
+            "default": {
+              "description": "Default error sample response"
+            }
+          },
+          "tags": [
+            "Auth"
+          ]
+        }
+      },
+      "/user": {
+        "summary": "Check and update your username information",
+        "get": {
+          "summary": "Get your username information",
+          "description": "Get your username information, indeed.",
+          "operationId": "get_user",
+          "responses": {
+            "default": {
+              "description": "Default error sample response"
+            }
+          },
+          "tags": [
+            "User"
+          ]
+        },
+        "put": {
+          "summary": "Update your username information",
+          "description": "Update your email and address on your username information.",
+          "operationId": "user_update",
+          "requestBody": {
+            "description": "The user object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "You'll get back your username information minus the password as confirmation of the update",
+              "content": {
+                "application/json": {
+                  "examples": {
+                    "Confirmation of Update": {
+                      "value": "{\n \"username\": \"John Doe\",\n \"email\": \"john@doe.com\",\n \"address\": \"12 John Doe Av.\"\n}"
+                    }
+                  }
+                }
+              }
+            },
+            "default": {
+              "description": "Default error sample response"
+            }
+          },
+          "tags": [
+            "User"
+          ]
+        }
+      },
+      "/flowers": {
+        "summary": "check, add, delete and update flowers at the store.",
+        "description": "On this path you can see the available flowers that are being sold, add flowers to be sold, update their information and delete flowers that are not longer sold. Thiss operations can only be performed by admins.",
+        "get": {
+          "summary": "See the flowers that ara available.",
+          "description": "See the flowers that ara available.",
+          "operationId": "flowers_get",
+          "responses": {
+            "200": {
+              "description": "You'll get the flowers available to add to a bouquet",
+              "content": {
+                "application/json": {
+                  "examples": {
+                    "Available Flowers": {
+                      "value": "[\n    {\n        \"id\": 1,\n        \"name\": \"Rose\",\n        \"price\": \"$5.00\"\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Violet\",\n        \"price\": \"$6.00\"\n    }\n]"
+                    }
+                  }
+                }
+              }
+            },
+            "default": {
+              "description": "Default error sample response"
+            }
+          },
+          "tags": [
+            "Flowers"
+          ]
+        },
+        "post": {
+          "summary": "Add a flower to the store.",
+          "description": "Add a flower to the store. Only and admin can do this operation",
+          "operationId": "flowers_addFlower",
+          "requestBody": {
+            "description": "A new flower object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Flower"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Add a flower to sell at the store",
+              "content": {
+                "application/json": {
+                  "examples": {
+                    "Successfully Added a Flower (Only Admins)": {
+                      "value": "{\n \"name\": \"Gardenia\",\n \"price\": 2\n\n}"
+                    }
+                  }
+                }
+              }
+            },
+            "default": {
+              "description": "Default error sample response"
+            }
+          },
+          "tags": [
+            "Flowers"
+          ]
+        }
+      },
+      "/flowers/:name": {
+        "summary": "Actions regarding specific flowers",
+        "description": "You can get single flower information, update a flower infromation on the store or deleting it.",
+        "get": {
+          "summary": "Get the information of an specific flower",
+          "description": "Get the information of an specific flower, indeed.",
+          "operationId": "flowers_get_single_flower",
+          "responses": {
+            "200": {
+              "description": "Fetch the information of an specific flower",
+              "content": {
+                "application/json": {
+                  "examples": {
+                    "Successful Request": {
+                      "value": "{\n    \"id\": 2,\n    \"name\": \"Violet\",\n    \"price\": \"$6.00\"\n}"
+                    }
+                  }
+                }
+              }
+            },
+            "default": {
+              "description": "Default error sample response"
+            }
+          },
+          "tags": [
+            "Flowers"
+          ]
+        },
+        "put": {
+          "summary": "Update the information of a flower at the store (Only admins).",
+          "description": "Update the information of a flower at the store (Only admins).",
+          "operationId": "flowers_update_quantity",
+          "requestBody": {
+            "description": "The flower object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Flower"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "If the request is sucessful, you'll get back the information you've uploaded",
+              "content": {
+                "application/json": {
+                  "examples": {
+                    "Sucessful Request": {
+                      "value": "{\n \"name\": \"Poppy\",\n \"price\": 23\n}"
+                    }
+                  }
+                }
+              }
+            },
+            "default": {
+              "description": "Default error sample response"
+            }
+          },
+          "tags": [
+            "Flowers"
+          ]
+        },
+        "delete": {
+          "summary": "Delete a specific flower from the storet.",
+          "description": "Delete a specific flower from the storet.",
+          "operationId": "flowers_delete_flower",
+          "responses": {
+            "200": {
+              "description": "If successfully deleted, you'll get back the flower you've deleted",
+              "content": {
+                "application/json": {
+                  "examples": {
+                    "Succesful Request": {
+                      "value": "{\n \"id\": 2\n \"name\": \"Poppy\",\n \"price\": 23\n}"
+                    }
+                  }
+                }
+              }
+            },
+            "default": {
+              "description": "Default error sample response"
+            }
+          },
+          "tags": [
+            "Flowers"
+          ]
+        }
+      },
+      "/bouquet": {
+        "summary": "This path gives you access to your current bouquet that can be ordered once it's finished",
+        "description": "This path gives you access to your current bouquet that can be ordered once it's finished. It allows you to see what do you have, to add flower and update the quantity of flowers you have or clear the bouquet if you decide to start over again.",
+        "get": {
+          "summary": "Allows you to get the content of your bouquet",
+          "description": "Allows you to get the content of your bouquet",
+          "operationId": "get_bouquet",
+          "responses": {
+            "200": {
+              "description": "If successful, you'll get all of the flowers in your bouquet with it's price, individual price and quantity.",
+              "content": {
+                "application/json": {
+                  "examples": {
+                    "Successful Request": {
+                      "value": "[{\"name\":\"Rose\",\"Individual Price\":\"$5.00\",\"quantity\":4,\"price\":\"$20.00\"},{\"name\":\"Violet\",\"Individual Price\":\"$6.00\",\"quantity\":3,\"price\":\"$18.00\"}]"
+                    }
+                  }
+                }
+              }
+            },
+            "default": {
+              "description": "Default error sample response"
+            }
+          },
+          "tags": [
+            "Bouquet"
+          ]
+        },
+        "post": {
+          "summary": "Allows you to add a flower to your bouquet.",
+          "description": "Allows you to add a flower to your bouquet. You just need to send in the request body the flower and the quantity.",
+          "operationId": "add_flower_to_bouquet",
+          "requestBody": {
+            "description": "The login object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bouquet"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "If successful, you'll get the flower you added as confirmation.",
+              "content": {
+                "application/json": {
+                  "examples": {
+                    "Successful Request": {
+                      "value": "{\"bouquet_id\":17,\"flower_id\":4,\"quantity\":6,\"price\":\"$48.00\"}"
+                    }
+                  }
+                }
+              }
+            },
+            "default": {
+              "description": "Default error sample response"
+            }
+          },
+          "tags": [
+            "Bouquet"
+          ]
+        },
+        "put": {
+          "summary": "Allows you to update the quantity of a flower you've previously added.",
+          "description": "Allows you to update the quantity of a flower you've previously added... yes",
+          "operationId": "update_quantity_bouquet_flowers",
+          "requestBody": {
+            "description": "The login object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bouquet"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Default error sample response",
+              "content": {
+                "application/json": {
+                  "examples": {
+                    "Successful Request": {
+                      "value": "{\"bouquet_id\":17,\"flower_id\":4,\"quantity\":6,\"price\":\"$48.00\"}"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Bouquet"
+          ]
+        },
+        "delete": {
+          "summary": "Allows you to clear the bouquet so you can start again.",
+          "description": "Allows you to clear the bouquet so you can start again... Yes",
+          "operationId": "Clear_Bouquet",
+          "responses": {
+            "200": {
+              "description": "If successful you'll get as confirmation all of the flowers on your boquet that have been cleared",
+              "content": {
+                "application/json": {
+                  "examples": {
+                    "Successful Request": {
+                      "value": "[{\"name\":\"Rose\",\"Individual Price\":\"$5.00\",\"quantity\":4,\"price\":\"$20.00\"},{\"name\":\"Violet\",\"Individual Price\":\"$6.00\",\"quantity\":3,\"price\":\"$18.00\"},{\"name\":\"Lily\",\"Individual Price\":\"$8.00\",\"quantity\":6,\"price\":\"$48.00\"}]"
+                    }
+                  }
+                }
+              }
+            },
+            "default": {
+              "description": "Default error sample response"
+            }
+          },
+          "tags": [
+            "Bouquet"
+          ]
+        }
+      },
+      "/bouquet/:flower": {
+        "summary": "This path allows you to delete an specific flower.",
+        "description": "This path allows you to delete an specific flower.",
+        "delete": {
+          "summary": "Deletes a single flower from your bouquet.",
+          "description": "Deletes a single flower from your bouquet.... yes",
+          "operationId": "delete_single_flower_from_bouquet",
+          "responses": {
+            "200": {
+              "description": "If successful, you'll get the information of the flower you deleted as confirmation.",
+              "content": {
+                "application/json": {
+                  "examples": {
+                    "Successful Request": {
+                      "value": "{\"bouquet_id\":17,\"flower_id\":4,\"quantity\":6,\"price\":\"$48.00\"}"
+                    }
+                  }
+                }
+              }
+            },
+            "default": {
+              "description": "Default error sample response"
+            }
+          },
+          "tags": [
+            "Bouquet"
+          ]
+        }
+      },
+      "/bouquet/checkout": {
+        "summary": "This path allows you to submit an order for the bouquet you've created.",
+        "post": {
+          "summary": "Submit the order for the bouquet you've just created.",
+          "description": "Submit the order for the bouquet you've just created. Once you have posted the order the bouquet will be cleared so you can start a new one in case you wish to put another order.",
+          "operationId": "bouquet_checkout",
+          "responses": {
+            "200": {
+              "description": "If successful you'll get the bouquet_id and username associated with the order as confirmation.",
+              "content": {
+                "application/json": {
+                  "examples": {
+                    "Successful Request": {
+                      "value": "{\"bouquet_id\":17,\"username\":\"Chears\"}"
+                    }
+                  }
+                }
+              }
+            },
+            "default": {
+              "description": "Default error sample response"
+            }
+          },
+          "tags": [
+            "Bouquet"
+          ]
+        }
+      },
+      "/orders": {
+        "summary": "Check the orders you've made",
+        "description": "Check the orders you've made",
+        "get": {
+          "summary": "Check the orders you've made.",
+          "description": "Check the orders you've made.... yes",
+          "operationId": "orders_get_orders",
+          "responses": {
+            "200": {
+              "description": "If successful you'll get an object with all of the orders you've made",
+              "content": {
+                "application/json": {
+                  "examples": {
+                    "Successful Request": {
+                      "value": "{\"13\":{\"total\":\"$120.00\",\"flowers\":{\"Violet\":{\"quantity\":6,\"combinedPrice\":\"$36.00\",\"individualPrice\":\"$6.00\"},\"Sunflower\":{\"quantity\":12,\"combinedPrice\":\"$84.00\",\"individualPrice\":\"$7.00\"}}}}"
+                    }
+                  }
+                }
+              }
+            },
+            "default": {
+              "description": "Default error sample response"
+            }
+          },
+          "tags": [
+            "Orders"
+          ]
+        }
+      },
+      "/orders/:id": {
+        "summary": "Here you can check or delete a specific order.",
+        "get": {
+          "summary": "Get a single order",
+          "description": "Get a single order",
+          "operationId": "orders_get_single_order",
+          "responses": {
+            "200": {
+              "description": "If succesful, you'll get the specific order you requested.",
+              "content": {
+                "application/json": {
+                  "examples": {
+                    "Successful Request": {
+                      "value": "{\"13\":{\"total\":\"$120.00\",\"flowers\":{\"Violet\":{\"quantity\":6,\"combinedPrice\":\"$36.00\",\"individualPrice\":\"$6.00\"},\"Sunflower\":{\"quantity\":12,\"combinedPrice\":\"$84.00\",\"individualPrice\":\"$7.00\"}}}}"
+                    }
+                  }
+                }
+              }
+            },
+            "default": {
+              "description": "Default error sample response"
+            }
+          },
+          "tags": [
+            "Orders"
+          ]
+        },
+        "delete": {
+          "summary": "Delete and Order",
+          "description": "Delete and Order",
+          "operationId": "delete_single_order",
+          "responses": {
+            "default": {
+              "description": "Default error sample response"
+            }
+          },
+          "tags": [
+            "Orders"
+          ]
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Login": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
+          },
+          "xml": {
+            "name": "Login"
+          }
+        },
+        "Register": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "address": {
+              "type": "string"
+            }
+          },
+          "xml": {
+            "name": "Register"
+          }
+        },
+        "User": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            },
+            "address": {
+              "type": "string"
+            }
+          }
+        },
+        "Flower": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "price": {
+              "type": "integer"
+            }
+          }
+        },
+        "Bouquet": {
+          "type": "object",
+          "properties": {
+            "flower": {
+              "type": "string"
+            },
+            "quantity": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    }
+  }
